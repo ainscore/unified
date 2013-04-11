@@ -3,7 +3,8 @@ define(["require", "module", "./listItem"], function(require, module, ListItem) 
     var ListView = function(title, document) {
         this.document = document;
         this.title = title;
-            this.dropAccepts = [];
+        this.dropAccepts = [];
+        this.createElements();
     };
 
     ListView.prototype = {

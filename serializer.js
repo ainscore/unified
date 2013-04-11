@@ -4,7 +4,7 @@ define(["require", "underscore"], function(require, _) {
         var moduleCache = {};
         var objectId = 0;
         var classId = 0;
-        function serialize(obj) {
+        function serialize(obj, dataManager) {
             if(objectCache[obj.objectId]) {
                 return "";
             }
@@ -21,7 +21,7 @@ define(["require", "underscore"], function(require, _) {
                         if(propName === "objectId")
                             return;
                         if(prop instanceof Object) {
-                            objectDeps += serialize(prop);
+                            objectDeps += serialize(prop, dataManager);
                             output += "obj_" + prop.objectId;
                         } else {
                             if(typeof prop === "string") {
@@ -37,7 +37,7 @@ define(["require", "underscore"], function(require, _) {
                 output += "];";
             } else {
                 if(obj.serialize) {
-                    var result = output + obj.serialize() + ";";
+                    var result = output + obj.serialize(dataManager) + ";";
                     result += "\n";
                     return result;
                 }
@@ -57,7 +57,7 @@ define(["require", "underscore"], function(require, _) {
                         return;
                     output += objString + "." + propName + " = ";
                     if(prop instanceof Object) {
-                        objectDeps += serialize(prop);
+                        objectDeps += serialize(prop, dataManager);
                         output += "obj_" + prop.objectId;
                     } else {
                         if(typeof prop === "string") {
@@ -76,8 +76,8 @@ define(["require", "underscore"], function(require, _) {
 
             return objectDeps + output;
         }
-        function serialize_parent(root) {
-            var rec_output = serialize(root);
+        function serialize_parent(root, dataManager) {
+            var rec_output = serialize(root, dataManager);
             var modules = _.map(moduleCache, function(obj_name, moduleName) {
                 if(moduleName !== "objId") {
                     return "'" + moduleName + "'";
@@ -103,7 +103,9 @@ define(["require", "underscore"], function(require, _) {
             for(var module in moduleCache) {
                 if(module == "objId") continue;
                 if(!moduleCache.hasOwnProperty(module)) continue;
-                output += moduleCache[module]+".prototype.constructor = " + "function(){};\n";
+                output += "var oldProto = " + moduleCache[module]+".prototype;\n";
+                output += moduleCache[module]+" = " + "function(){};\n";
+                output += moduleCache[module]+".prototype = " + "oldProto;\n";
             }
             output += rec_output;
             //output += "debugger;\n"

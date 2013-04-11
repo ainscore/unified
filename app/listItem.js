@@ -4,6 +4,7 @@ define(["require", "module"], function(require, module) {
         this.document = document;
         this.title = title;
         this.dropGroup = dropGroup;
+        this.createElements();
     };
 
     ListItem.prototype = {
