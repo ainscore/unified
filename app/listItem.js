@@ -1,13 +1,14 @@
-define(["require", "module"], function(require, module) {
+define(["require", "module", "./callback", "./klass"], function(require, module, Callback, Klass) {
 
-    var ListItem = function(title, document, dropGroup) {
-        this.document = document;
-        this.title = title;
-        this.dropGroup = dropGroup;
-        this.createElements();
-    };
+    var ListItem = Klass({
+        initialize:function(title, document, dropGroup) {
+            this.document = document;
+            this.title = title;
+            this.dropGroup = dropGroup;
+            this.createElements();
+            this.dragging = false;
+        },
 
-    ListItem.prototype = {
         createElements:function() {
             if(!this.container) {
                 var container = this.container = this.document.createElement("li");
@@ -17,42 +18,40 @@ define(["require", "module"], function(require, module) {
             return this.container;
         },
         createEvents:function() {
-            var _this = this;
             var active = false;
-            var moveXdiff = 
-            this.document.addEventListener("selectstart", function(e) {
-                e.preventDefault();
-            });
-            this.container.addEventListener("mousedown", function(e) {
-                var width = _this.container.offsetWidth() 
-                    - 2*parseInt(_this.container.style("padding"));
-                var elLoc = _this.container.pageXY();
-                moveXdiff = elLoc.left - e.pageX;
-                moveYdiff = elLoc.top - e.pageY;
-                var styles = {
-                    width:width + "px",
-                    position:"absolute",
-                    left:(e.pageX + moveXdiff ) + "px",
-                    top:(e.pageY + moveYdiff) + "px"
-                };
-                _this.container.styles(styles);
-                active = true;
-            });
-            this.document.addEventListener("mousemove", function(e) {
-                if(!active)
-                    return;
-                var elLoc = _this.container.pageXY();
-                _this.container.style("left", (e.pageX + moveXdiff) + "px");
-                _this.container.style("top", (e.pageY + moveYdiff) + "px");
-            });
-            this.container.addEventListener("mouseup", function(e) {
-                active = false;
-                _this.container.style("position", "static");
-                _this.dropGroup.dropItem(_this, e.pageX, e.pageY);
-            });
+            this.document.addEventListener("selectstart", new Callback(this, this.selectStart));
+            this.document.addEventListener("mousemove", new Callback(this, this.dragMove));
+            this.container.on("mousedown", new Callback(this, this.startDrag));
+            this.container.on("mouseup", new Callback(this, this.stopDrag));
         },
-        getModule: function() {
-            return module.id;
+        selectStart: function(e) {
+            e.preventDefault();
+        },
+        startDrag: function(e) {
+            var width = this.container.offsetWidth() 
+            - 2*parseInt(this.container.style("padding"));
+            var elLoc = this.container.pageXY();
+            this.moveXdiff = elLoc.left - e.pageX;
+            this.moveYdiff = elLoc.top - e.pageY;
+            var styles = {
+                width:width + "px",
+                position:"absolute",
+                left:(e.pageX + this.moveXdiff ) + "px",
+                top:(e.pageY + this.moveYdiff) + "px"
+            };
+            this.container.styles(styles);
+            this.dragging = true;
+        },
+        stopDrag: function(e) {
+            this.dragging = false;
+            this.container.style("position", "static");
+            this.dropGroup.dropItem(this, e.pageX, e.pageY);
+        },
+        dragMove: function(e) {
+            if(!this.dragging)
+                return;
+            this.container.style("left", (e.pageX + this.moveXdiff) + "px");
+            this.container.style("top", (e.pageY + this.moveYdiff) + "px");
         },
         getPageXY: function() {
             return this.container.pageXY();
@@ -64,7 +63,7 @@ define(["require", "module"], function(require, module) {
             this._dropArea = dropArea;
         }
 
-    };
+    });
 
     ListItem.DEFAULT_STYLE = {
         "padding": "10px",

@@ -5,6 +5,7 @@ define([
     "./listItem", 
     "./dropGroup", 
     "./callback", 
+    "./klass", 
 ], 
 function(
     require, 
@@ -12,18 +13,19 @@ function(
     ListView, 
     ListItem, 
     DropGroup,
-    Callback
+    Callback,
+    Klass
 ) {
 
-    var Todo = function(document,user) {
-        this.document = document;
-        this.dropGroup = new DropGroup();
-        this.user = user;
-        this.lists = {};
-        this.createElements();
-    };
-
-    Todo.prototype = {
+    var Todo = Klass({
+        initialize: function(document,user) {
+            this.document = document;
+            this.dropGroup = new DropGroup();
+            this.user = user;
+            this.lists = {};
+            this.createElements();
+            this.createEvents();
+        },
 
         createElements: function() {
             if(!this.container) {
@@ -80,10 +82,10 @@ function(
             }
         },
 
-        getModule: function() {
-            return module.id;
-        }
-    };
+        //getModule: function() {
+            //return module.id;
+        //}
+    });
 
     return Todo;
 

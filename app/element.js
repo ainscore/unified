@@ -6,9 +6,18 @@ define(["require", "underscore"], function(require,_) {
         this.document = document;
         this.children = [];
         this._styles = {};
+        this.events = { };
     };
 
     StaticElement.prototype = {
+        on: function(eventName, callback) {
+            if(this.events[eventName]) {
+               this.events[eventName].push(callback); 
+            } else {
+               this.events[eventName] = [callback]; 
+            }
+            return this;
+        },
         getId: function() {
             return this.id;
         },
@@ -51,8 +60,27 @@ define(["require", "underscore"], function(require,_) {
             }
             return this._styles;
         },
-        serialize: function() {
-            return "document.getElementById('"+this.id+"')";
+        serialize: function(serialHelper) {
+            //var objId = serialHelper.objString();
+            //var output = "var " + objId + "=";
+            var output = "function () {";
+            output += "var el = document.getElementById('"+this.id+"');\n";
+            for(var event in this.events) {
+                for(var i=0; i<this.events[event].length; i++) {
+                    output += "el.addEventListener('" + event + "', ";
+                    output += "function(e) {\n";
+
+                    output += serialHelper.serialize(this.events[event][i], serialHelper);
+                    //output += this.events[event][i].objectId;
+                    output += ".execute(e)\n";
+                    output += "}\n";
+                    output += " );\n";
+                }
+            }
+            output += "return el;\n";
+            output += "}();\n";
+            //serialHelper.write(output);
+            return output;
         }
     };
 

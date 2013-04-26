@@ -1,13 +1,12 @@
-define(["require", "module", "./listItem"], function(require, module, ListItem) {
+define(["require", "module", "./listItem", "./klass"], function(require, module, ListItem, Klass) {
 
-    var ListView = function(title, document) {
-        this.document = document;
-        this.title = title;
-        this.dropAccepts = [];
-        this.createElements();
-    };
-
-    ListView.prototype = {
+    var ListView = Klass({
+        initialize: function(title, document) {
+            this.document = document;
+            this.title = title;
+            this.dropAccepts = [];
+            this.createElements();
+        },
         createElements:function() {
             if(!this.container) {
                 var container = this.container = this.document.createElement("div");
@@ -54,11 +53,8 @@ define(["require", "module", "./listItem"], function(require, module, ListItem) 
         },
         addDropAccept:function(dropArea) {
             this.dropAccepts.push(dropArea);
-        },
-        getModule: function() {
-            return module.id;
         }
-    };
+    });
 
     ListView.LIST_STYLE = {
         "list-style-type": "none",

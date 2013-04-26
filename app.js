@@ -1,6 +1,7 @@
 var express = require("express");
 var jsdom = require("jsdom"); 
 //var todo = require("todo"); 
+
 var requirejs = require("requirejs"); 
 
 requirejs.config({
@@ -12,7 +13,7 @@ var ListService = requirejs("app/listService");
 var DataManager = requirejs("app/dataManager");
 var User = requirejs("app/user");
 
-requirejs(['app/todo', 'app/document'],function(Todo, Document) {
+requirejs(['app/todo', 'app/document'], function(Todo, Document) {
     var app = express();
     app.use(express.static(__dirname + '/public'));
     var dataManager = new DataManager();

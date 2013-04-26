@@ -1,11 +1,11 @@
-define(["require", "module"], function(require, module) {
+define(["require", "module", "./klass"], function(require, module, Klass) {
 
-    var DropGroup = function() {
-        this.dropAreas = [];
-        this.dropItems = [];
-    };
+    var DropGroup = Klass({
+        initialize:function() {
+            this.dropAreas = [];
+            this.dropItems = [];
+        },
 
-    DropGroup.prototype = {
         addDropArea: function(dropArea) {
             this.dropAreas.push(dropArea);
         },
@@ -39,7 +39,7 @@ define(["require", "module"], function(require, module) {
                 }
             }
         }
-    };
+    });
 
     return DropGroup;
 
