@@ -1,13 +1,12 @@
-define(["require", "./element"], function(require, Element) {
+define(["require", "./element", "klass"], function(require, Element, Klass) {
 
-    var StaticDocument = function() {
-        this.elCount = 0;
-        this.body = this.createElement("body");
-        this.scripts = [];
-        this.events = { };
-    };
-
-    StaticDocument.prototype = {
+    var StaticDocument = Klass({
+        initialize: function() {
+            this.elCount = 0;
+            this.body = this.createElement("body");
+            this.scripts = [];
+            this.events = { };
+        },
         createElement: function(tag) {
             this.elCount++;
             return new Element(tag, "dom_el_" + this.elCount, this);
@@ -32,9 +31,6 @@ define(["require", "./element"], function(require, Element) {
             html +=  this.body.getHtml();
             html += "</html>";
             return html;
-        },
-        getModule: function() {
-            return "app/browser_document";
         },
         serialize: function(serialHelper) {
             //serialHelper.write("document");
@@ -64,7 +60,7 @@ define(["require", "./element"], function(require, Element) {
             }
             return this;
         }
-    };
+    });
 
     return StaticDocument;
 

@@ -1,4 +1,4 @@
-define(["require", "module", "./klass", "./dataService"], function(require, module, Klass, DataService) {
+define(["require", "klass", "dataService"], function(require, Klass, DataService) {
 
     var ListService = Klass(DataService, {
         init: function(user) {

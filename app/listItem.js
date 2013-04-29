@@ -1,4 +1,4 @@
-define(["require", "module", "./callback", "./klass"], function(require, module, Callback, Klass) {
+define(["require", "callback", "klass"], function(require, Callback, Klass) {
 
     var ListItem = Klass({
         initialize:function(title, document, dropGroup) {

@@ -1,4 +1,4 @@
-define([ "require","module","./klass" ], function(require,module, Klass) {
+define([ "require","module","klass" ], function(require,module, Klass) {
 
     var Event = Klass({
         initialize: function(object, func, args) {

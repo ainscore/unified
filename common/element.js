@@ -1,18 +1,27 @@
-define(["require"], function(require) {
+define(["require", "klass"], function(require, Klass) {
 
-    var BrowserElement = function(element) {
-        this._el = element;
-    };
-
-    BrowserElement.prototype = {
+    var BrowserElement = Klass({
+        initialize: function(element) {
+            this._el = element;
+        },
         getId: function() {
             return this._el.id;
         },
         getElement: function() {
             return this._el;
         },
-        appendChild: function(element) {
-            this._el.appendChild(element.getElement());
+        append: function(elements) {
+            var args;
+
+            if(elements instanceof Array) {
+                args = elements;
+            } else {
+                args = Array.prototype.concat.apply([],arguments);
+            }
+
+            for(var i=0; i<args.length; i++) {
+                this._el.appendChild(arguments[i].getElement());
+            }
         },
         text: function(text) {
             if(text !== undefined) {
@@ -71,7 +80,7 @@ define(["require"], function(require) {
                 left: box.left + win.pageXOffset - docElem.clientLeft
             };
         }
-    };
+    });
 
     return BrowserElement;
 

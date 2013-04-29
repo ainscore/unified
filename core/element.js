@@ -1,15 +1,14 @@
-define(["require", "underscore"], function(require,_) {
+define(["require", "underscore", "klass"], function(require,_,Klass) {
 
-    var StaticElement = function(tag, id, document) {
-        this.tag = tag;
-        this.id = id;
-        this.document = document;
-        this.children = [];
-        this._styles = {};
-        this.events = { };
-    };
-
-    StaticElement.prototype = {
+    var StaticElement = Klass({
+        initialize:function(tag, id, document) {
+            this.tag = tag;
+            this.id = id;
+            this.document = document;
+            this.children = [];
+            this._styles = {};
+            this.events = { };
+        },
         on: function(eventName, callback) {
             if(this.events[eventName]) {
                this.events[eventName].push(callback); 
@@ -21,8 +20,18 @@ define(["require", "underscore"], function(require,_) {
         getId: function() {
             return this.id;
         },
-        appendChild: function(element) {
-            this.children.push(element);
+        append: function(elements) {
+            var args;
+
+            if(elements instanceof Array) {
+                args = elements;
+            } else {
+                args = Array.prototype.concat.apply([],arguments);
+            }
+
+            for(var i=0; i<args.length; i++) {
+                this.children.push(args[i]);
+            }
         },
         text: function(text) {
             this.innerText = text;
@@ -61,8 +70,6 @@ define(["require", "underscore"], function(require,_) {
             return this._styles;
         },
         serialize: function(serialHelper) {
-            //var objId = serialHelper.objString();
-            //var output = "var " + objId + "=";
             var output = "function () {";
             output += "var el = document.getElementById('"+this.id+"');\n";
             for(var event in this.events) {
@@ -82,7 +89,7 @@ define(["require", "underscore"], function(require,_) {
             //serialHelper.write(output);
             return output;
         }
-    };
+    });
 
     return StaticElement;
 

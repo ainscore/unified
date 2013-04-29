@@ -1,4 +1,4 @@
-define(["require", "module", "./klass"], function(require, module, Klass) {
+define(["require", "klass"], function(require, Klass) {
 
     var DropGroup = Klass({
         initialize:function() {
@@ -12,10 +12,6 @@ define(["require", "module", "./klass"], function(require, module, Klass) {
 
         addDropItem: function(dropItem) {
             this.dropItems.push(dropItem);
-        },
-
-        getModule:function() {
-            return module.id;
         },
 
         dropItem: function(item,x,y) {

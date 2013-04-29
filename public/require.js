@@ -1998,3 +1998,14 @@ var requirejs, require, define;
     //Set up with config info.
     req(cfg);
 }(this));
+
+requirejs.config({
+    paths: {
+        "klass":"./common/klass",
+        "callback":"./common/callback",
+        "element":"./common/element",
+        "document":"./common/document",
+        "dataService":"./common/dataService",
+    }
+});
+

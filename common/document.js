@@ -1,11 +1,11 @@
-define(["require", "./browser_element"], function(require, Element) {
+define(["require", "element", "klass"], function(require, Element, Klass) {
 
-    var BrowserDocument = function(realDoc,body) {
-        this.realDoc = realDoc;
-        this.body = realDoc.body;
-    };
+    var BrowserDocument = Klass({
+        initialize:function(realDoc,body) {
+            this.realDoc = realDoc;
+            this.body = realDoc.body;
+        },
 
-    BrowserDocument.prototype = {
         createElement: function(tag) {
             var realEl = this.realDoc.createElement(tag);
             return new Element(realEl);
@@ -17,7 +17,7 @@ define(["require", "./browser_element"], function(require, Element) {
         addEventListener: function(event, func) {
             this.realDoc.addEventListener(event, func);
         }
-    };
+    });
 
     return BrowserDocument;
 

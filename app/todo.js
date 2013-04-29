@@ -1,15 +1,13 @@
 define([
     "require", 
-    "module", 
     "./listView", 
     "./listItem", 
     "./dropGroup", 
-    "./callback", 
-    "./klass", 
+    "callback", 
+    "klass", 
 ], 
 function(
     require, 
-    module, 
     ListView, 
     ListItem, 
     DropGroup,
@@ -18,10 +16,10 @@ function(
 ) {
 
     var Todo = Klass({
-        initialize: function(document,user) {
+        initialize: function(document,models) {
             this.document = document;
             this.dropGroup = new DropGroup();
-            this.user = user;
+            this.user = models["user"];
             this.lists = {};
             this.createElements();
             this.createEvents();
@@ -31,25 +29,41 @@ function(
             if(!this.container) {
                 this.container = this.document.createElement("div");
 
-                this.todo = new ListView("Todo", this.document);
-                this.inprogress = new ListView("In Progress", this.document);
-                this.done = new ListView("Done", this.document);
-                this.lists["todo"] = this.todo;
-                this.lists["inprogress"] = this.inprogress;
-                this.lists["done"] = this.done;
-                this.done.addDropAccept(this.inprogress);
-                this.dropGroup.addDropArea(this.todo);
-                this.dropGroup.addDropArea(this.inprogress);
-                this.dropGroup.addDropArea(this.done);
+                var todo = new ListView("Todo", this.document);
+                var inprogress = new ListView("In Progress", this.document);
+                var done = new ListView("Done", this.document);
+                done.addDropAccept(inprogress);
+
+                this.dropGroup.addDropArea(todo);
+                this.dropGroup.addDropArea(inprogress);
+                this.dropGroup.addDropArea(done);
                  
                 var body = this.document.body;
-                body.appendChild(this.container);
-                this.container.appendChild(this.todo.createElements());
-                this.container.appendChild(this.inprogress.createElements());
-                this.container.appendChild(this.done.createElements());
+                body.append(this.container);
+                this.container.append(
+                    todo.createElements(),
+                    inprogress.createElements(),                
+                    done.createElements()
+                );
+
+                this.lists["todo"] = todo;
+                this.lists["inprogress"] = inprogress;
+                this.lists["done"] = done;
             }
             return this.container;
         },
+
+        createEvents: function() {
+            //this.lists["todo"].createEvents();
+            //this.lists["inprogress"].createEvents();
+            //this.lists["done"].createEvents();
+
+            var listItem = this.newTask({title:"Test"});
+            this.lists["todo"].addItem(listItem);
+
+            this.user.getListItems(new Callback(this, this.addItems, []));
+        },
+
 
         update:function(data) {
         },
@@ -57,34 +71,18 @@ function(
         newTask: function(item) {
             var listItem = new ListItem(item.title, this.document, this.dropGroup);
             this.dropGroup.addDropItem(listItem);
-            //this.todo.addItem(listItem);
             listItem.setDropArea(this.todo);
             listItem.createEvents();
             return listItem;
         },
 
-        createEvents: function() {
-            this.todo.createEvents();
-            this.inprogress.createEvents();
-            this.done.createEvents();
-            var listItem = this.newTask({title:"Test"});
-            this.lists["todo"].addItem(listItem);
-            var _this = this;
-
-            this.user.getListItems(new Callback(this, this.addItems, []));
-        },
-
         addItems: function(items) {
-            var _this = this;
             for(var i=0; i<items.length; i++) {
-                var item = _this.newTask(items[i]);
-                _this.lists[items[i].list].addItem(item);
+                var item = this.newTask(items[i]);
+                this.lists[items[i].list].addItem(item);
             }
         },
 
-        //getModule: function() {
-            //return module.id;
-        //}
     });
 
     return Todo;

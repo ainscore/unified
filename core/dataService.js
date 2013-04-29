@@ -1,4 +1,4 @@
-define(["require", "module", "./klass"], function(require, module, Klass) {
+define(["require", "module", "klass"], function(require, module, Klass) {
 
     var DataService = Klass({
         serialize: function(serialHelper) {
@@ -20,11 +20,11 @@ define(["require", "module", "./klass"], function(require, module, Klass) {
                     //output += this.__proto__.__proto__.serialize();
                 //}
             }
-            output += "ajax:function(ajaxId, method, callback) {\n";
+            //output += "ajax:function(ajaxId, method, callback) {\n";
 
-            output += "var xhr = new XMLHttpRequest(); xhr.onreadystatechange = function() { if (xhr.readyState === 4) { callback.execute(JSON.parse(xhr.responseText)); } }; xhr.open('GET', '/data/'+ ajaxId + '/' + method, true); xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded'); xhr.send();"
+            //output += "var xhr = new XMLHttpRequest(); xhr.onreadystatechange = function() { if (xhr.readyState === 4) { callback.execute(JSON.parse(xhr.responseText)); } }; xhr.open('GET', '/data/'+ ajaxId + '/' + method, true); xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded'); xhr.send();"
 
-            output += "},\n";
+            //output += "},\n";
 
             output += "};";
 

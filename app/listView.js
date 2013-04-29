@@ -1,4 +1,4 @@
-define(["require", "module", "./listItem", "./klass"], function(require, module, ListItem, Klass) {
+define(["require", "./listItem", "klass"], function(require, ListItem, Klass) {
 
     var ListView = Klass({
         initialize: function(title, document) {
@@ -13,22 +13,13 @@ define(["require", "module", "./listItem", "./klass"], function(require, module,
                 var header = this.document.createElement("div");
                 this.list = this.document.createElement("ul");
                 header.text(this.title);
-                container.appendChild(header);
-                container.appendChild(this.list);
+                container.append(header, this.list);
                 container.styles(ListView.CONTAINER_STYLE);
                 this.list.styles(ListView.LIST_STYLE);
                 header.styles(ListView.HEADER_STYLE);
-                //this.listItem = new ListItem("Test Item", this.document);
-                //list.appendChild(this.listItem.createElements());
             }
 
             return this.container;
-        },
-        createEvents:function() {
-            //this.listItem.createEvents();
-            //this.container.addEventListener("click", function() {
-                //alert("text");
-            //});
         },
         inDropArea:function(x,y) {
             var topRight = this.container.pageXY();
@@ -43,7 +34,8 @@ define(["require", "module", "./listItem", "./klass"], function(require, module,
             }
         },
         addItem:function(item) {
-            this.list.appendChild(item.createElements());
+            this.list.append(item.createElements());
+            item.setDropArea(this);
         },
         removeItem:function(item) {
             this.list.removeChild(item.createElements());

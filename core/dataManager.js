@@ -1,4 +1,4 @@
-define(["./callback"], function(Callback) {
+define(["callback"], function(Callback) {
 
     var DataManager = function() {
         this.idGen = 0;

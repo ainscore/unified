@@ -124,10 +124,10 @@ define(["require", "underscore"], function(require, _) {
                 }
                 return null;
             });
-            modules.push("'app/browser_document'");
-            modules.push("'app/browser_element'");
+            modules.push("'document'");
+            //modules.push("'app/browser_element'");
             moduleVars.push("Document");
-            moduleVars.push("Element");
+            //moduleVars.push("Element");
             var output = "require([";
             output += modules.join(",");
             output += "], function(";
