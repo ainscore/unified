@@ -10,8 +10,15 @@ define(["require", "klass", "./listService"],
 
         getListItems: function(callback) {
             //return this._listService.getListItems(this._userId, callback);
-            return this._listService.getListItems(callback);
+            return this._listService.getListItems(this._userId, callback);
+        },
+
+        updateListItem: function(itemTitle, list) {
+            console.log("change", itemTitle);
+            console.log(this._userId);
+            return this._listService.updateItem(this._userId, itemTitle, list);
         }
+
     });
 
     return User;

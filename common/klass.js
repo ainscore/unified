@@ -23,6 +23,16 @@ define([ "require","module" ], function(require,module) {
         }
         constructor.prototype.__KLASS__ = true;
 
+        constructor.spawnOf = function(klass) {
+            if(parent === klass) {
+                return true;
+            } else if(!parent.prototype) {
+                return false;
+            } else {
+                return parent.spawnOf(klass);
+            }
+        };
+
         constructor.prototype._parent = function() {
             var obj = this;
             var pseudoParent = function() {

@@ -2000,12 +2000,13 @@ var requirejs, require, define;
 }(this));
 
 requirejs.config({
+    baseUrl: "_unified",
     paths: {
-        "klass":"./common/klass",
-        "callback":"./common/callback",
-        "element":"./common/element",
-        "document":"./common/document",
-        "dataService":"./common/dataService",
+        "klass":"/_unified/klass",
+        "callback":"/_unified/callback",
+        "element":"/_unified/element",
+        "document":"/_unified/document",
+        "dataService":"/_unified/dataService",
     }
 });
 

@@ -7,6 +7,7 @@ define(["require", "callback", "klass"], function(require, Callback, Klass) {
             this.dropGroup = dropGroup;
             this.createElements();
             this.dragging = false;
+            this._changeListeners = [];
         },
 
         createElements:function() {
@@ -61,6 +62,13 @@ define(["require", "callback", "klass"], function(require, Callback, Klass) {
         },
         setDropArea: function(dropArea) {
             this._dropArea = dropArea;
+            for(var i=0; i<this._changeListeners.length; i++) {
+                this._changeListeners[i].execute(this.title, dropArea.getId());
+            }
+
+        },
+        addChangeListener: function(callback) {
+            this._changeListeners.push(callback);
         }
 
     });

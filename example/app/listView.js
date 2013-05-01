@@ -1,9 +1,10 @@
 define(["require", "./listItem", "klass"], function(require, ListItem, Klass) {
 
     var ListView = Klass({
-        initialize: function(title, document) {
+        initialize: function(title, id, document) {
             this.document = document;
             this.title = title;
+            this.id = id;
             this.dropAccepts = [];
             this.createElements();
         },
@@ -45,6 +46,9 @@ define(["require", "./listItem", "klass"], function(require, ListItem, Klass) {
         },
         addDropAccept:function(dropArea) {
             this.dropAccepts.push(dropArea);
+        },
+        getId:function() {
+            return this.id;
         }
     });
 

@@ -1,25 +1,31 @@
-var express = require("express");
-var Unified = require("./unified"); 
+var Unified = require("../unified"); 
 
 var unified = new Unified();
-var requirejs = unified.getLoader();
+unified.setPublic("app", __dirname + '/app');
+var load = unified.getLoader();
 
-var ListService = requirejs("app/listService");
-var User = requirejs("app/user");
-var Todo = requirejs("app/todo");
-var Doc = requirejs("document");
+var ListService = load("app/listService");
+var User = load("app/user");
+var Todo = load("app/todo");
+var Doc = load("document");
 
-var app = express();
-app.use(express.static(__dirname + '/public'));
+var storage = unified.getDataManager().getStorage();
 
+storage['1'] = [
+    {
+        title:"Go to work",
+        list:"todo"
+    },
+    {
+        title:"Get a Job",
+        list:"inprogress"
+    },
+];
 
-var listService = new ListService();
-var user = new User(1, listService);
+var listService = new ListService(unified.getDataManager());
+var user = new User('1', listService);
 unified.addModel("user", user);
 unified.setApp(Todo);
 
-app.get('/', unified.coreHandler());
-app.get('/data/:ajaxId/:method', unified.dataHandler());
-
-app.listen(3000);
+unified.getExpress().listen(3000);
 
