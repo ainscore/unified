@@ -14,8 +14,6 @@ define(["require", "klass", "./listService"],
         },
 
         updateListItem: function(itemTitle, list) {
-            console.log("change", itemTitle);
-            console.log(this._userId);
             return this._listService.updateItem(this._userId, itemTitle, list);
         }
 

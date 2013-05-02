@@ -1,4 +1,4 @@
-var requirejs = require("requirejs"); 
+var requirejs = require("./core/r.js"); 
 
 var requireConfig = {
     baseUrl: __dirname,

@@ -79,7 +79,6 @@ function(
         addItems: function(items) {
             for(var i=0; i<items.length; i++) {
                 var item = this.newTask(items[i]);
-                console.log(item);
                 this.lists[items[i].list].addItem(item);
                 item.addChangeListener(new Callback(this, this.updateItem, []));
             }
