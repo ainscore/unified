@@ -72,21 +72,18 @@ define(["require", "underscore", "klass"], function(require,_,Klass) {
         serialize: function(serialHelper) {
             var output = "function () {";
             output += "var el = document.getElementById('"+this.id+"');\n";
-            for(var event in this.events) {
-                for(var i=0; i<this.events[event].length; i++) {
-                    output += "el.addEventListener('" + event + "', ";
+            _.each(this.events, function(eventList, eventName) {
+                _.each(eventList, function(eventCallback) {
+                    output += "el.addEventListener('" + eventName + "', ";
                     output += "function(e) {\n";
-
-                    output += serialHelper.serialize(this.events[event][i], serialHelper);
-                    //output += this.events[event][i].objectId;
+                    output += serialHelper.serialize(eventCallback, serialHelper);
                     output += ".execute(e)\n";
                     output += "}\n";
                     output += " );\n";
-                }
-            }
+                });
+            });
             output += "return el;\n";
             output += "}();\n";
-            //serialHelper.write(output);
             return output;
         }
     });

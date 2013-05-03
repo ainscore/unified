@@ -5,6 +5,7 @@ var requireConfig = {
     paths: {
         "klass":"./common/klass",
         "callback":"./common/callback",
+        "underscore":"./common/lodash.underscore",
         "element":"./core/element",
         "document":"./core/document",
         "serializer":"./core/serializer",

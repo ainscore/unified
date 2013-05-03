@@ -2007,6 +2007,7 @@ requirejs.config({
         "element":"/_unified/element",
         "document":"/_unified/document",
         "dataService":"/_unified/dataService",
+        "underscore":"/_unified/lodash.underscore",
     }
 });
 

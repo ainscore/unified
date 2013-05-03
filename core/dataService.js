@@ -1,4 +1,4 @@
-define(["require", "klass", "module"], function(require, Klass, module) {
+define(["require", "klass", "module", "underscore"], function(require, Klass, module, _) {
 
     var DataService = Klass({
         serialize: function(serialHelper) {
@@ -17,34 +17,28 @@ define(["require", "klass", "module"], function(require, Klass, module) {
     });
 
     DataService.serializeModule  = function(mod, dataManager) {
-        //var ajaxId = dataManager.register(this.getModule());
+
         var output = "define(['dataService','require','klass'],function(DataService, require,Klass){\n";
         output += "return Klass(DataService, {";
-        //output += "initialize:function(ajaxId) {";
-        //output += "this.ajaxId = ajaxId;";
-        //output += "},\n";
-        for(var i in mod.prototype) {
 
-           if(mod.hasOwnProperty(i)) continue;
-
-            output += i + ":";
+        _.each(_.functions(mod.prototype), function(funcName) {
+            output += funcName + ":";
             output += "function() {\n";
             output += "var args = Array.prototype.slice.call(arguments);\n" 
             output += "var callback = args.pop();\n" 
             output += "callback.apply || args.push(callback);\n" 
             output += "this.ajax(";
             output += "this.ajaxId,";
-            //output += "'" + ajaxId + "',";
-            output += "'" + i + "',";
+            output += "'" + funcName + "',";
             output += "args,";
             output += "callback";
             output += ");\n";
             output += "},\n";
-        }
+
+        });
 
         output += "});});";
 
-        //serialHelper.write(output);
         return output;
     }
 

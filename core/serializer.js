@@ -5,35 +5,32 @@ define(["require", "underscore"], function(require, _) {
         var objectId = 0;
         var classId = 0;
 
-
         function serialize(obj, serialHelper) {
+            if(!_.isArray(obj) && !_.isObject(obj)) {
+                var output = "";
+                if(_.isString(obj)) {
+                    output += "'";
+                    output += obj;
+                    output += "'";
+                } else {
+                    output += obj;
+                }
+                return output;
+            }
+
             if(objectCache[obj.objectId]) {
                 return objectCache[obj.objectId];
             }
-            var queue = [];
             var objString = "obj_" + objectId;
             var output = "var " + objString + " = ";
             obj.objectId = objectId;
             objectCache[obj.objectId] = objString;
             objectId++;
-            if(obj instanceof Array) {
+            if(_.isArray(obj)) {
                 output += "[";
                 _.each(obj, function(prop, propName) {
-                        if(propName === "objectId")
-                            return;
-                        if(prop instanceof Object) {
-                            output += serialize(prop, serialHelper);
-                            //output += "obj_" + prop.objectId;
-                        } else {
-                            if(typeof prop === "string") {
-                                output += "'";
-                                output += prop;
-                                output += "'";
-                            } else {
-                                output += prop;
-                            }
-                        }
-                        output += ",";
+                    output += serialize(prop, serialHelper);
+                    output += ",";
                 });
                 output += "];\n";
                 serialHelper.write(output);
@@ -55,21 +52,8 @@ define(["require", "underscore"], function(require, _) {
                     output = "";
 
                     _.each(obj, function(prop, propName) {
-                        if(propName === "objectId")
-                            return;
                         output += objString + "." + propName + " = ";
-                        if(prop instanceof Object) {
-                            output += serialize(prop, serialHelper);
-                            //output += "obj_" + prop.objectId;
-                        } else {
-                            if(typeof prop === "string") {
-                                output += "'";
-                                output += prop;
-                                output += "'";
-                            } else {
-                                output += prop;
-                            }
-                        }
+                        output += serialize(prop, serialHelper);
                         output += ";\n";
                     });
 
@@ -100,15 +84,7 @@ define(["require", "underscore"], function(require, _) {
                     objectDeps += value;
                 },
 
-                serialize:serialize,
-
-                classId:function() {
-                    return classId++;
-                },
-
-                objString:function() {
-                    return "obj_" + objectId++;
-                },
+                serialize:serialize
             };
 
             var rec_output = serialize(root, serialHelper);
@@ -125,15 +101,13 @@ define(["require", "underscore"], function(require, _) {
                 return null;
             });
             modules.push("'document'");
-            //modules.push("'app/browser_element'");
             moduleVars.push("Document");
-            //moduleVars.push("Element");
             var output = "require([";
             output += modules.join(",");
             output += "], function(";
             output += moduleVars.join(",");
             output += ") {\n";
-            output += "var document = new Document(window.document);\n"
+            output += "var document = new Document(window.document);\n";
             for(var module in moduleCache) {
                 if(module == "objId") continue;
                 if(!moduleCache.hasOwnProperty(module)) continue;
@@ -143,9 +117,6 @@ define(["require", "underscore"], function(require, _) {
             }
             output += objectDeps;
             output += rec_output;
-            //output += "debugger;\n"
-            //objectCache[obj.getObjectId()];
-            //output += "obj_" + root.objectId + ".createEvents();\n"
             output += "});\n"
             return output;
 

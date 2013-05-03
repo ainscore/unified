@@ -1,12 +1,11 @@
-define(["callback"], function(Callback) {
+define(["callback", "klass"], function(Callback, Klass) {
 
-    var DataManager = function() {
-        this.idGen = 0;
-        this.modules = [];
-        this.storage = {};
-    };
-
-    DataManager.prototype = {
+    var DataManager = Klass({
+        initialize: function() {
+            this.idGen = 0;
+            this.modules = [];
+            this.storage = {};
+        },
 
         register: function(moduleId) {
             for(var i=0; i<this.modules.length; i++) {
@@ -25,7 +24,7 @@ define(["callback"], function(Callback) {
             var _this = this;
             var module;
             for(var i=0; i<this.modules.length; i++) {
-                if(this.modules[i].id = id) {
+                if(this.modules[i].id == id) {
                     module = this.modules[i];
                 }
             }
@@ -45,7 +44,7 @@ define(["callback"], function(Callback) {
         getStorage: function() {
             return this.storage;
         }
-    };
+    });
 
     return DataManager;
 
