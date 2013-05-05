@@ -22,7 +22,8 @@ function(
             this.user = models["user"];
             this.lists = {};
             this.createElements();
-            this.createEvents();
+
+            this.user.getListItems(new Callback(this, this.addItems, []));
         },
 
         createElements: function() {
@@ -53,18 +54,6 @@ function(
             return this.container;
         },
 
-        createEvents: function() {
-            //this.lists["todo"].createEvents();
-            //this.lists["inprogress"].createEvents();
-            //this.lists["done"].createEvents();
-
-            var listItem = this.newTask({title:"Test"});
-            this.lists["todo"].addItem(listItem);
-
-            this.user.getListItems(new Callback(this, this.addItems, []));
-        },
-
-
         update:function(data) {
         },
 
@@ -77,6 +66,10 @@ function(
         },
 
         addItems: function(items) {
+            items.sort(function(a, b) {
+                return a.index - b.index;
+            });
+
             for(var i=0; i<items.length; i++) {
                 var item = this.newTask(items[i]);
                 this.lists[items[i].list].addItem(item);
@@ -84,8 +77,8 @@ function(
             }
         },
 
-        updateItem: function(item, list) {
-            this.user.updateListItem(item,list);
+        updateItem: function(item, list, index) {
+            this.user.updateListItem(item,list, index);
         }
 
     });

@@ -60,10 +60,10 @@ define(["require", "callback", "klass"], function(require, Callback, Klass) {
         getDropArea: function() {
             return this._dropArea;
         },
-        setDropArea: function(dropArea) {
+        setDropArea: function(dropArea, index) {
             this._dropArea = dropArea;
             for(var i=0; i<this._changeListeners.length; i++) {
-                this._changeListeners[i].execute(this.title, dropArea.getId());
+                this._changeListeners[i].execute(this.title, dropArea.getId(), index);
             }
 
         },

@@ -13,8 +13,8 @@ define(["require", "klass", "./listService"],
             return this._listService.getListItems(this._userId, callback);
         },
 
-        updateListItem: function(itemTitle, list) {
-            return this._listService.updateItem(this._userId, itemTitle, list);
+        updateListItem: function(itemTitle, list, index) {
+            return this._listService.updateItem(this._userId, itemTitle, list, index);
         }
 
     });

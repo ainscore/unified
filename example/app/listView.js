@@ -6,6 +6,7 @@ define(["require", "./listItem", "klass"], function(require, ListItem, Klass) {
             this.title = title;
             this.id = id;
             this.dropAccepts = [];
+            this.listItems = [];
             this.createElements();
         },
         createElements:function() {
@@ -36,10 +37,12 @@ define(["require", "./listItem", "klass"], function(require, ListItem, Klass) {
         },
         addItem:function(item) {
             this.list.append(item.createElements());
-            item.setDropArea(this);
+            item.setDropArea(this, this.listItems.length);
+            this.listItems.push(item);
         },
         removeItem:function(item) {
             this.list.removeChild(item.createElements());
+            this.listItems = this.listItems.splice(_.indexOf(this.listItems, item));
         },
         getDropAccepts:function() {
             return this.dropAccepts;
@@ -49,6 +52,9 @@ define(["require", "./listItem", "klass"], function(require, ListItem, Klass) {
         },
         getId:function() {
             return this.id;
+        },
+        getListItems:function() {
+            return this.listItems;
         }
     });
 

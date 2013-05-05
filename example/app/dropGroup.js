@@ -24,12 +24,12 @@ define(["require", "klass"], function(require, Klass) {
                         for(var j=0; j<newAreaAccepts.length; j++){
                             if(newAreaAccepts[j] === currentArea) {
                                 newArea.addItem(item);
-                                item.setDropArea(newArea);
+                                //item.setDropArea(newArea, );
                             }
                         }
                     } else {
                         newArea.addItem(item);
-                        item.setDropArea(newArea);
+                        //item.setDropArea(newArea);
                     }
 
                 }

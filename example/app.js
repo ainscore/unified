@@ -14,11 +14,13 @@ var storage = unified.getDataManager().getStorage();
 storage['1'] = [
     {
         title:"Go to work",
-        list:"todo"
+        list:"todo",
+        index:0
     },
     {
         title:"Get a Job",
-        list:"inprogress"
+        list:"inprogress",
+        index:0
     },
 ];
 

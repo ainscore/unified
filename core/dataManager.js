@@ -9,7 +9,7 @@ define(["callback", "klass"], function(Callback, Klass) {
 
         register: function(moduleId) {
             for(var i=0; i<this.modules.length; i++) {
-                if(this.modules[i].moduleId === moduleId) {
+                if(this.modules[i].module === moduleId) {
                     return this.modules[i].id;
                 }
             }
@@ -27,6 +27,11 @@ define(["callback", "klass"], function(Callback, Klass) {
                 if(this.modules[i].id == id) {
                     module = this.modules[i];
                 }
+            }
+
+            if(!module) {
+                console.log("data module not found");
+                return;
             }
 
             requirejs([module.module], function(Service) {

@@ -42,17 +42,19 @@ var delivery = Klass({
             function(req,res,next){
                 var path = req.path.match(/\/(.*)\.js$/);
                 for(var i=0; i<_this.publics.length; i++) {
-                    //console.log(_this.publics[i].url)
                     if(path.indexOf(_this.publics[i].url) === 0) {
                         express.static(_this.publics[i].dir)(req,res,next)
                     }
                 }
                 path = "./" + path[1];
                 requirejs([path], function(module) {
-                    if(module && module.prototype && module.prototype.__KLASS__ && module.spawnOf(DataService)) {
+                    if(module 
+                       && module.prototype 
+                       && module.prototype.__KLASS__ 
+                       && module.spawnOf(DataService)) 
+                    {
                         res.end(DataService.serializeModule(module, this.dataManager));
-                    }else {
-                        //console.log(req.path);
+                    } else {
                         express.static(__dirname + "/common")(req,res,next);
                     }
                 });
@@ -102,7 +104,9 @@ var delivery = Klass({
                 req.param("method"), 
                 req.param("args"), 
                 function(result) {
-                    res.write(result);
+                    if(result) {
+                        res.write(result);
+                    }
                     res.end();
                 }
             );

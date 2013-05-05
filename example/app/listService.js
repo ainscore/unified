@@ -12,21 +12,25 @@ define(["require", "klass", "dataService", "mongodb"], function(require, Klass, 
             callback.execute(list);
         },
 
-        addListItem: function(userid, itemTitle, list) {
+        addListItem: function(userid, itemTitle, listName, index, callback) {
             var list = this._storage[userid];
             list.push({
                 title:itemTitle,
-                list:list,
+                list:listName,
+                index:index,
             });
+            callback.execute();
         },
 
-        updateItem: function(userid, itemTitle, list, callback) {
+        updateItem: function(userid, itemTitle, list, index, callback) {
             var items = this._storage[userid];
             for(var i=0; i<items.length; i++) {
                 if(items[i].title == itemTitle) {
                     items[i].list = list;
+                    items[i].index = index;
                 }
             }
+            callback.execute();
         }
 
     });
