@@ -7,6 +7,7 @@ define(["require", "underscore", "klass"], function(require,_,Klass) {
             this.document = document;
             this.children = [];
             this._styles = {};
+            this._attrs = {};
             this.events = { };
         },
         on: function(eventName, callback) {
@@ -15,6 +16,10 @@ define(["require", "underscore", "klass"], function(require,_,Klass) {
             } else {
                this.events[eventName] = [callback]; 
             }
+            return this;
+        },
+        attr: function(name, value) {
+            this._attrs[name] = value;
             return this;
         },
         getId: function() {
@@ -43,7 +48,10 @@ define(["require", "underscore", "klass"], function(require,_,Klass) {
             for(var name in this._styles) {
                 html += name + ":" + this._styles[name] + ";";
             }
-            html += '"';
+            html += '" ';
+            for(var name in this._attrs) {
+                html += name + "=\"" + this._attrs[name] + "\" ";
+            }
             html += '>\n' ;
             if(this.innerText) {
                 html += this.innerText;

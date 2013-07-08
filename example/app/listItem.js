@@ -30,7 +30,7 @@ define(["require", "callback", "klass"], function(require, Callback, Klass) {
         },
         startDrag: function(e) {
             var width = this.container.offsetWidth() 
-            - 2*parseInt(this.container.style("padding"));
+                - 2*parseInt(this.container.style("padding"));
             var elLoc = this.container.pageXY();
             this.moveXdiff = elLoc.left - e.pageX;
             this.moveYdiff = elLoc.top - e.pageY;
